@@ -59,23 +59,26 @@ func TestClient_Post(t *testing.T) {
 		Sort: 0,
 	}
 	
-	//data := map[string]interface{}{
-	//	"id":   1,
-	//	"pid":  0,
-	//	"code": "110000",
-	//	"name": "北京市",
-	//	"sort": 0,
-	//}
-	
 	if resp, err := client.Put("/backend/region/update-region", data); err != nil {
 		t.Error(err)
 		return
 	} else {
 		t.Log(resp.Response.Status)
 		t.Log(resp.Response.Header)
-		t.Log(resp.Bytes())
-		t.Log(resp.String())
+		t.Log(resp.ReadBytes())
+		t.Log(resp.ReadString())
 		t.Log(resp.GetHeaders())
 		t.Log(resp.GetCookies())
+	}
+}
+
+func TestClient_Download(t *testing.T) {
+	url := "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png"
+	
+	if path, err := http.NewClient().Download(url, "./"); err != nil {
+		t.Error(err)
+		return
+	} else {
+		t.Log(path)
 	}
 }

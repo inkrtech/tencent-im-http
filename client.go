@@ -155,42 +155,57 @@ func (c *Client) Use(middlewares ...MiddlewareFunc) *Client {
 	return c
 }
 
+// Download download a file from the network address to the local.
+func (c *Client) Download(url, dir string, filename ...string) (string, error) {
+	return NewDownload(c).Download(url, dir, filename...)
+}
+
+// Request send an http request.
 func (c *Client) Request(method, url string, data ...interface{}) (*Response, error) {
 	return NewRequest(c).request(method, url, data...)
 }
 
+// Get send an http request use get method.
 func (c *Client) Get(url string, data ...interface{}) (*Response, error) {
 	return c.Request(MethodGet, url, data...)
 }
 
+// Post send an http request use post method.
 func (c *Client) Post(url string, data ...interface{}) (*Response, error) {
 	return c.Request(MethodPost, url, data...)
 }
 
+// Put send an http request use put method.
 func (c *Client) Put(url string, data ...interface{}) (*Response, error) {
 	return c.Request(MethodPut, url, data...)
 }
 
+// Patch send an http request use patch method.
 func (c *Client) Patch(url string, data ...interface{}) (*Response, error) {
 	return c.Request(MethodPatch, url, data...)
 }
 
+// Delete send an http request use patch method.
 func (c *Client) Delete(url string, data ...interface{}) (*Response, error) {
 	return c.Request(MethodDelete, url, data...)
 }
 
+// Head send an http request use head method.
 func (c *Client) Head(url string, data ...interface{}) (*Response, error) {
 	return c.Request(MethodHead, url, data...)
 }
 
+// Options send an http request use options method.
 func (c *Client) Options(url string, data ...interface{}) (*Response, error) {
 	return c.Request(MethodOptions, url, data...)
 }
 
+// Connect send an http request use connect method.
 func (c *Client) Connect(url string, data ...interface{}) (*Response, error) {
 	return c.Request(MethodConnect, url, data...)
 }
 
+// Trace send an http request use trace method.
 func (c *Client) Trace(url string, data ...interface{}) (*Response, error) {
 	return c.Request(MethodTrace, url, data...)
 }

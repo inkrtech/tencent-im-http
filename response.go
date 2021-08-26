@@ -10,6 +10,7 @@ package http
 import (
 	"io/ioutil"
 	"net/http"
+	"sync"
 	
 	"github.com/dobyte/http/internal"
 )
@@ -19,16 +20,19 @@ type Response struct {
 	Request *http.Request
 	body    []byte
 	cookies map[string]string
+	mu      sync.Mutex
 }
 
-// Bytes retrieves and returns the response content as []byte.
-func (r *Response) Bytes() []byte {
+// ReadBytes retrieves and returns the response content as []byte.
+func (r *Response) ReadBytes() []byte {
 	if r == nil || r.Response == nil {
 		return []byte{}
 	}
 	
 	if r.body == nil {
 		var err error
+		r.mu.Lock()
+		defer r.mu.Unlock()
 		if r.body, err = ioutil.ReadAll(r.Response.Body); err != nil {
 			return nil
 		}
@@ -37,14 +41,14 @@ func (r *Response) Bytes() []byte {
 	return r.body
 }
 
-// String retrieves and returns the response content as string.
-func (r *Response) String() string {
-	return internal.UnsafeBytesToString(r.Bytes())
+// ReadString retrieves and returns the response content as string.
+func (r *Response) ReadString() string {
+	return internal.UnsafeBytesToString(r.ReadBytes())
 }
 
 // Scan convert the response into a complex data structure.
 func (r *Response) Scan(any interface{}) error {
-	return internal.Scan(r.Bytes(), any)
+	return internal.Scan(r.ReadBytes(), any)
 }
 
 // Close closes the response when it will never be used.
