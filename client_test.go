@@ -11,7 +11,7 @@ import (
 	"errors"
 	"testing"
 	
-	"github.com/dobyte/http"
+	"github.com/webzh/http"
 )
 
 const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlc2MiOjE2MjgwNDAzMjYxNTQ2MzIwMDAsImV4cCI6MTYyODIyMDMyNiwiaWF0IjoxNjI4MDQwMzI2LCJpZCI6MX0.KM19c6URIih-5SyycYIjNAdSiPKxMQEz3DoROm0N3nw"

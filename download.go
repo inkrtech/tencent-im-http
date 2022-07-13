@@ -11,7 +11,7 @@ import (
 	"os"
 	"strings"
 	
-	"github.com/dobyte/http/internal"
+	"github.com/webzh/http/internal"
 )
 
 var contentTypeToFileSuffix = map[string]string{

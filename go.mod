@@ -1,1 +1,1 @@
-module "github.com/dobyte/http"
+module "github.com/webzh/http"

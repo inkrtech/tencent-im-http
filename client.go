@@ -28,7 +28,7 @@ type Client struct {
 }
 
 const (
-	defaultUserAgent = "DobyteHttpClient"
+	defaultUserAgent = "WebzhHttpClient"
 	
 	HeaderUserAgent     = "User-Agent"
 	HeaderContentType   = "Content-Type"

@@ -12,7 +12,7 @@ import (
 	"net/http"
 	"sync"
 	
-	"github.com/dobyte/http/internal"
+	"github.com/webzh/http/internal"
 )
 
 type Response struct {

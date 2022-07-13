@@ -24,7 +24,7 @@ import (
 	"strings"
 	"time"
 	
-	"github.com/dobyte/http/internal"
+	"github.com/webzh/http/internal"
 )
 
 const (
