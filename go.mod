@@ -1,1 +1,1 @@
-module "github.com/webzh/http"
+module "github.com/inkrtech/tencent-im-http"

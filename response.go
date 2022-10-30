@@ -11,8 +11,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"sync"
-	
-	"github.com/webzh/http/internal"
+
+	"github.com/inkrtech/tencent-im-http/internal"
 )
 
 type Response struct {
@@ -28,7 +28,7 @@ func (r *Response) ReadBytes() []byte {
 	if r == nil || r.Response == nil {
 		return []byte{}
 	}
-	
+
 	if r.body == nil {
 		var err error
 		r.mu.Lock()
@@ -37,7 +37,7 @@ func (r *Response) ReadBytes() []byte {
 			return nil
 		}
 	}
-	
+
 	return r.body
 }
 
@@ -67,7 +67,7 @@ func (r *Response) HasHeader(key string) bool {
 			return true
 		}
 	}
-	
+
 	return false
 }
 
@@ -86,7 +86,7 @@ func (r *Response) GetHeaders() map[string]interface{} {
 			headers[k] = v[0]
 		}
 	}
-	
+
 	return headers
 }
 
@@ -96,7 +96,7 @@ func (r *Response) HasCookie(key string) bool {
 		r.cookies = r.GetCookies()
 	}
 	_, ok := r.cookies[key]
-	
+
 	return ok
 }
 

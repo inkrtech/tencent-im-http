@@ -10,8 +10,8 @@ package http
 import (
 	"os"
 	"strings"
-	
-	"github.com/webzh/http/internal"
+
+	"github.com/inkrtech/tencent-im-http/internal"
 )
 
 var contentTypeToFileSuffix = map[string]string{
@@ -55,33 +55,33 @@ func (d *Download) Download(url, dir string, filename ...string) (string, error)
 	if err != nil {
 		return "", err
 	}
-	
+
 	var path string
-	
+
 	if len(filename) > 0 {
 		path = strings.TrimRight(dir, string(os.PathSeparator)) + string(os.PathSeparator) + filename[0]
 	} else {
 		path = d.genFilePath(resp, dir)
 	}
-	
+
 	if err = internal.SaveToFile(path, resp.ReadBytes()); err != nil {
 		return "", err
 	}
-	
+
 	return path, nil
 }
 
 // genFilePath generate file path based on response content type
 func (d *Download) genFilePath(resp *Response, dir string) string {
 	path := strings.TrimRight(dir, string(os.PathSeparator)) + string(os.PathSeparator) + internal.RandStr(16)
-	
+
 	if suffix := internal.GetFileType(resp.ReadBytes()); suffix != "" {
 		path += "." + suffix
 	}
-	
+
 	if internal.Exists(path) {
 		return d.genFilePath(resp, dir)
 	}
-	
+
 	return path
 }

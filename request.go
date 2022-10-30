@@ -23,8 +23,8 @@ import (
 	"regexp"
 	"strings"
 	"time"
-	
-	"github.com/webzh/http/internal"
+
+	"github.com/inkrtech/tencent-im-http/internal"
 )
 
 const (
@@ -70,7 +70,7 @@ func (r *Request) request(method, url string, data ...interface{}) (resp *Respon
 	if err != nil {
 		return nil, err
 	}
-	
+
 	if count := len(r.client.middlewares); count > 0 {
 		handlers := make([]MiddlewareFunc, 0, count+1)
 		handlers = append(handlers, r.client.middlewares...)
@@ -86,7 +86,7 @@ func (r *Request) request(method, url string, data ...interface{}) (resp *Respon
 	} else {
 		resp, err = r.call()
 	}
-	
+
 	return resp, err
 }
 
@@ -94,7 +94,7 @@ func (r *Request) request(method, url string, data ...interface{}) (resp *Respon
 func (r *Request) prepare(method, url string, data ...interface{}) (req *http.Request, err error) {
 	method = strings.ToUpper(method)
 	url = r.client.baseUrl + url
-	
+
 	var params string
 	if len(data) > 0 {
 		switch data[0].(type) {
@@ -121,10 +121,10 @@ func (r *Request) prepare(method, url string, data ...interface{}) (req *http.Re
 			}
 		}
 	}
-	
+
 	if method == MethodGet {
 		buffer := bytes.NewBuffer(nil)
-		
+
 		if params != "" {
 			switch r.client.headers[HeaderContentType] {
 			case ContentTypeJson, ContentTypeXml:
@@ -137,7 +137,7 @@ func (r *Request) prepare(method, url string, data ...interface{}) (req *http.Re
 				}
 			}
 		}
-		
+
 		if req, err = http.NewRequest(method, url, buffer); err != nil {
 			return nil, err
 		}
@@ -147,7 +147,7 @@ func (r *Request) prepare(method, url string, data ...interface{}) (req *http.Re
 				buffer = bytes.NewBuffer(nil)
 				writer = multipart.NewWriter(buffer)
 			)
-			
+
 			for _, item := range strings.Split(params, "&") {
 				array := strings.Split(item, "=")
 				if len(array[1]) > 6 && strings.Compare(array[1][0:6], fileUploadingKey) == 0 {
@@ -178,11 +178,11 @@ func (r *Request) prepare(method, url string, data ...interface{}) (req *http.Re
 					}
 				}
 			}
-			
+
 			if err = writer.Close(); err != nil {
 				return nil, err
 			}
-			
+
 			if req, err = http.NewRequest(method, url, buffer); err != nil {
 				return nil, err
 			} else {
@@ -205,13 +205,13 @@ func (r *Request) prepare(method, url string, data ...interface{}) (req *http.Re
 			}
 		}
 	}
-	
+
 	if r.client.ctx != nil {
 		req = req.WithContext(r.client.ctx)
 	} else {
 		req = req.WithContext(context.Background())
 	}
-	
+
 	if len(r.client.headers) > 0 {
 		for key, value := range r.client.headers {
 			if key != "" {
@@ -219,7 +219,7 @@ func (r *Request) prepare(method, url string, data ...interface{}) (req *http.Re
 			}
 		}
 	}
-	
+
 	if len(r.client.cookies) > 0 {
 		var cookies = make([]string, 0)
 		for key, value := range r.client.cookies {
@@ -229,18 +229,18 @@ func (r *Request) prepare(method, url string, data ...interface{}) (req *http.Re
 		}
 		req.Header.Set(HeaderCookie, strings.Join(cookies, ";"))
 	}
-	
+
 	if host := req.Header.Get(HeaderHost); host != "" {
 		req.Host = host
 	}
-	
+
 	return req, nil
 }
 
 // call nitiate an HTTP request and return the response data.
 func (r *Request) call() (resp *Response, err error) {
 	resp = &Response{Request: r.Request}
-	
+
 	for {
 		if resp.Response, err = r.client.Do(r.Request); err != nil {
 			if resp.Response != nil {
@@ -248,7 +248,7 @@ func (r *Request) call() (resp *Response, err error) {
 					log.Printf(`%+v`, err)
 				}
 			}
-			
+
 			if r.retryCount > 0 {
 				r.retryCount--
 				time.Sleep(r.retryInterval)
@@ -259,6 +259,6 @@ func (r *Request) call() (resp *Response, err error) {
 			break
 		}
 	}
-	
+
 	return resp, err
 }
